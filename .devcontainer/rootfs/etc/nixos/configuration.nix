@@ -8,6 +8,8 @@ in {
   };
   # boot.tmpOnTmpfs = true;
   networking = {
+    # machine hostname
+    hostName = "devcontainer";
     # networking settings for containers
     firewall.enable = false;
     # for some reason, dhcpcd doesn't work nicely
@@ -28,7 +30,9 @@ in {
   environment.systemPackages = with pkgs; [
     vim
     zsh
+    git
     nodejs
+    acl
     arion
     docker-client
     devcontainer-patch
@@ -67,9 +71,14 @@ in {
     group = "vscode";
     extraGroups = [ "wheel" "docker" ];
   };
-  security.sudo.configFile = ''
-    %wheel  ALL=(ALL:ALL) NOPASSWD: ALL
-  '';
+  security.sudo.extraRules = [{
+    runAs = "root";
+    groups = [ "wheel" ];
+    commands = [{
+      command = "ALL";
+      options = [ "NOPASSWD" ];
+    }];
+  }];
 
   system.activationScripts.installInitScript = ''
     if [ ! -f /usr/sbin/init ]; then
@@ -77,13 +86,25 @@ in {
     fi
   '';
   system.activationScripts.vscodePatch = ''
+    mkdir -p /bin
+    for f in /run/current-system/sw/bin/*; do
+      ln -sf "$(/run/current-system/sw/bin/readlink $f)" "/bin/$(basename $f)"
+    done
     if [ ! -d /lib ]; then
       ln -fs $systemConfig/sw/lib /lib
     fi
     if [ ! -d /lib64 ]; then
       ln -fs /lib /lib64
     fi
+    # allow docker socket to be owned by wheel
+    chgrp wheel /var/run/docker.sock
   '';
+  system.activationScripts.ghCodespacePatch = ''
+    # allow nix to build using /tmp in codespace
+    $systemConfig/sw/bin/setfacl -k /tmp
+  '';
+  environment.variables.LD_LIBRARY_PATH = "";
+  environment.sessionVariables.LD_LIBRARY_PATH = "";
 
   system.nssModules = lib.mkForce [ ];
   system.stateVersion = "22.05";

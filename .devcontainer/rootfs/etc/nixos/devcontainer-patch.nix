@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     cp "${stdenv.cc.cc.lib}/lib64/libstdc++.so.6" $out/lib
     # ld-linux-x86-64.so.2 is needed by vscode-server's nodejs in case it install 32 bit nodejs
     cp "${glibc}/lib64/ld-linux-x86-64.so.2" $out/lib64
-    ln -sf $out/lib64/ld-linux-x86-64.so.2 $out/lib64/ld-linux.so.2
+    ln -sf ${glibc}/lib64/ld-linux-x86-64.so.2 $out/lib64/ld-linux.so.2
   '';
   meta = {
     description = "VS Code devcontainer with Nix";
