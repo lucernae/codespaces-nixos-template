@@ -1,6 +1,0 @@
-{
-    "terminal.integrated.env.linux": {
-        // disable LD_LIBRARY_PATH for NixOS shell
-        "LD_LIBRARY_PATH": "",
-    }
-}
