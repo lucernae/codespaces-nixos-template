@@ -9,7 +9,7 @@ services:
       PATH: /bin:/usr/bin:/run/current-system/sw/bin/
       container: docker
     hostname: devcontainer
-    image: ghcr.io/lucernae/devcontainer-nix:nixos-arion
+    image: ghcr.io/lucernae/devcontainer-nix:main--nixos-arion
     privileged: true
     stop_signal: SIGRTMIN+3
     sysctls: {}
