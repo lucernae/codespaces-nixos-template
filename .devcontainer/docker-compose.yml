@@ -13,9 +13,9 @@ services:
     privileged: true
     stop_signal: SIGRTMIN+3
     sysctls: {}
-    tmpfs:
-    - /run
-    - /run/wrappers
+    # tmpfs:
+    # - /run
+    # - /run/wrappers
     tty: true
     volumes:
     - /sys/fs/cgroup:/sys/fs/cgroup:ro
