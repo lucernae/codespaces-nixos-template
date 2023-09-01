@@ -35,12 +35,14 @@ in {
     acl
     arion
     docker-client
-    devcontainer-patch
+    docker-compose
+    # devcontainer-patch
   ];
   nix = {
     settings = {
+      filter-syscalls = false;
       experimental-features = [ "nix-command" "flakes" ];
-      extra-platforms = [ "x86_64-darwin" "aarch64-darwin" ];
+      extra-platforms = [ "x86_64-linux" "aarch64-linux" ];
     };
   };
   services = {
@@ -48,6 +50,8 @@ in {
     tailscale.enable = true;
     openssh.enable = true;
   };
+
+  programs.nix-ld.enable = true;
 
   # systemd settings. you can enable/disable services.
   # systemd.services.nginx.serviceConfig.AmbientCapabilities =
@@ -85,18 +89,6 @@ in {
       ln -fs $systemConfig/init /usr/sbin/init
     fi
   '';
-  system.activationScripts.vscodePatch = ''
-    mkdir -p /bin
-    for f in $systemConfig/sw/bin/*; do
-      ln -sf "$(readlink $f)" "/bin/$(basename $f)"
-    done
-    if [ ! -d /lib ]; then
-      ln -fs $systemConfig/sw/lib /lib
-    fi
-    if [ ! -d /lib64 ]; then
-      ln -fs /lib /lib64
-    fi
-  '';
   system.activationScripts.ghCodespacePatch = ''
     # GitHub codespace needs node in /usr/bin
     if [ ! -f /usr/bin/node ]; then
@@ -105,8 +97,6 @@ in {
     # allow nix to build using /tmp in codespace
     $systemConfig/sw/bin/setfacl -k /tmp
   '';
-  environment.variables.LD_LIBRARY_PATH = "";
-  environment.sessionVariables.LD_LIBRARY_PATH = "";
 
   system.nssModules = lib.mkForce [ ];
   system.stateVersion = "22.05";

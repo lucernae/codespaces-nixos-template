@@ -10,5 +10,4 @@
   ];
 
   home.packages = with pkgs; [ sudo ]; 
-
 }

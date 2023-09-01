@@ -3,14 +3,16 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, ... }: {
-    nixosConfigurations = {
+  outputs = inputs@{ flake-utils, nixpkgs, home-manager, ... }: 
+  flake-utils.lib.eachDefaultSystem (system: {
+    packages.nixosConfigurations = {
       devcontainer = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+        inherit system;
         modules = [
           ./configuration.nix
           home-manager.nixosModules.home-manager
@@ -26,5 +28,5 @@
         ];
       };
     };
-  };
+  });
 }

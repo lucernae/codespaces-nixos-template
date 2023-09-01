@@ -11,7 +11,11 @@ services:
       container: docker
     hostname: devcontainer
     # image: ghcr.io/lucernae/devcontainer-nix:main--nixos-arion
-    image: ghcr.io/lucernae/devcontainer-nix:nixos-dockertools--nixos-23.05--x86_64-linux---latest
+    image: ghcr.io/lucernae/devcontainer-nix:nixos-dockertools--nixos-23.05---latest
+    # image: ghcr.io/lucernae/devcontainer-nix:nixos-dockertools--nixos-23.05--x86_64-linux---latest
+    command: 
+      - /usr/sbin/init
+      - --system
     privileged: true
     stop_signal: SIGRTMIN+3
     sysctls: {}
