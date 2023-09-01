@@ -1,9 +1,9 @@
 # generated using arion, do not edit manually. Override using docker-compose.override.yml
 services:
   devcontainer:
-    cap_add:
-    - CAP_NET_ADMIN
-    - SYS_ADMIN
+    # cap_add:
+    # - CAP_NET_ADMIN
+    # - SYS_ADMIN
     environment:
       PATH: /bin:/usr/bin:/run/current-system/sw/bin/
       # NIX_LD_LIBRARY_PATH: /run/current-system/sw/share/nix-ld/lib
@@ -14,17 +14,18 @@ services:
     image: ghcr.io/lucernae/devcontainer-nix:nixos-dockertools--nixos-23.05---latest
     # image: ghcr.io/lucernae/devcontainer-nix:nixos-dockertools--nixos-23.05--x86_64-linux---latest
     command: 
-      - /usr/sbin/init
-      - --system
+      - /bin/sh
+      - -c
+      - "sleep infinity"
     privileged: true
     stop_signal: SIGRTMIN+3
-    sysctls: {}
-    tmpfs:
-    - /run
-    - /run/wrappers
-    tty: true
+    # sysctls: {}
+    # tmpfs:
+    # - /run
+    # - /run/wrappers
+    # tty: true
     volumes:
-    - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    # - /sys/fs/cgroup:/sys/fs/cgroup:ro
     - ../:/workspace:cached
     - ./rootfs/etc/nixos:/etc/nixos:rw
     - /var/run/docker.sock:/var/run/docker.sock:rw
