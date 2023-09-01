@@ -25,7 +25,7 @@ services:
     # - /run/wrappers
     # tty: true
     volumes:
-    # - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    - /sys/fs/cgroup:/sys/fs/cgroup:ro
     - ../:/workspace:cached
     - ./rootfs/etc/nixos:/etc/nixos:rw
     - /var/run/docker.sock:/var/run/docker.sock:rw
